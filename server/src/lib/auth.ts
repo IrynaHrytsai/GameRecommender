@@ -16,6 +16,23 @@ export const auth = betterAuth({
     'http://localhost:5173',
     'http://localhost:5173/',
   ],
+  advanced: {
+    useSecureCookies: true,
+    cookies: {
+      state: {
+        attributes: {
+          sameSite: 'none',
+          secure: true,
+        },
+      },
+      pkceCodeVerifier: {
+        attributes: {
+          sameSite: 'none',
+          secure: true,
+        },
+      },
+    },
+  },
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
