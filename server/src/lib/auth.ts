@@ -1,19 +1,11 @@
 import { betterAuth } from 'better-auth';
-import { Pool } from 'pg';
 import dotenv from 'dotenv';
 dotenv.config();
-
-const authPool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production'
-    ? { rejectUnauthorized: false }
-    : false,
-});
 
 export const auth = betterAuth({
   database: {
     provider: 'pg',
-    pool: authPool,
+    url: process.env.DATABASE_URL!,
   },
   secret: process.env.BETTER_AUTH_SECRET!,
   baseURL: process.env.BETTER_AUTH_URL || 'http://localhost:3001',
