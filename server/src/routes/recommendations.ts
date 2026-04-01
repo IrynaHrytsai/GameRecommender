@@ -1,4 +1,4 @@
-import { Game, games } from '../data/games';
+import { Game, games } from '../data/games.js';
 
 export interface RecommendationResult {
   game: Game;
@@ -21,7 +21,6 @@ export function getRecommendations(
       .map(g => ({ game: g, score: g.rating, matchedTags: [], reason: 'Highly rated by the community' }));
   }
 
-  // Exclude liked, disliked, AND completed from suggestions
   const excludeIds = new Set([...likedIds, ...dislikedIds, ...completedIds]);
 
   const tagFrequency: Record<string, number> = {};

@@ -15,22 +15,20 @@ const PORT = process.env.PORT || 3001;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 
 app.use(helmet({
-  contentSecurityPolicy: false, // handled by frontend
+  contentSecurityPolicy: false,
   crossOriginResourcePolicy: { policy: 'cross-origin' },
 }));
 
 app.use(cors({
   origin: FRONTEND_URL,
-  credentials: true, // needed for auth cookies
+  credentials: true,
   methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
 }));
 
-// Better Auth handles ALL /api/auth/* routes (OAuth callbacks etc.)
 app.all('/api/auth/*', toNodeHandler(auth));
 
 app.use(express.json());
 
-// ── Games ──────────────────────────────────────────────
 app.get('/api/games', (_req, res) => {
   res.json(games);
 });
@@ -41,14 +39,12 @@ app.get('/api/games/:id', (req, res) => {
   return res.json(game);
 });
 
-// ── Recommendations ───────────────────────────────────
 app.post('/api/recommendations', (req, res) => {
   const { likedIds = [], dislikedIds = [], completedIds = [], limit = 8 } = req.body;
   if (!Array.isArray(likedIds)) return res.status(400).json({ error: 'likedIds must be an array' });
   return res.json(getRecommendations(likedIds, dislikedIds, completedIds, limit));
 });
 
-// ── User statuses (requires auth) ────────────────────
 app.use('/api/statuses', statusesRouter);
 
 app.listen(PORT, () => {

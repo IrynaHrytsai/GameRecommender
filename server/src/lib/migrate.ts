@@ -1,4 +1,3 @@
-// Run once: npm run db:migrate
 import { pool } from './db.js';
 
 async function migrate() {
@@ -6,7 +5,6 @@ async function migrate() {
   try {
     console.log('Running migrations...');
 
-    // Better Auth needs these tables
     await client.query(`
       CREATE TABLE IF NOT EXISTS "user" (
         id TEXT PRIMARY KEY,
@@ -55,7 +53,6 @@ async function migrate() {
       );
     `);
 
-    // Our custom table for game statuses
     await client.query(`
       CREATE TABLE IF NOT EXISTS game_statuses (
         user_id TEXT NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
@@ -65,8 +62,7 @@ async function migrate() {
         PRIMARY KEY (user_id, game_id)
       );
 
-      CREATE INDEX IF NOT EXISTS idx_game_statuses_user
-        ON game_statuses(user_id);
+      CREATE INDEX IF NOT EXISTS idx_game_statuses_user ON game_statuses(user_id);
     `);
 
     console.log('✅ Migrations complete');

@@ -10,7 +10,3 @@ export const pool = new Pool({
     ? { rejectUnauthorized: false }
     : false,
 });
-
-pool.on('error', (err) => {
-  console.error('Unexpected DB error', err);
-});

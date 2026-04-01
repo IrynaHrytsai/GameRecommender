@@ -3,7 +3,6 @@ import { Pool } from 'pg';
 import dotenv from 'dotenv';
 dotenv.config();
 
-// Better Auth manages its own pg pool
 const authPool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.NODE_ENV === 'production'

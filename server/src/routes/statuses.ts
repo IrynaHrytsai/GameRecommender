@@ -4,31 +4,26 @@ import { auth } from '../lib/auth.js';
 
 const router = Router();
 
-// Helper — get authenticated user from request
 async function getUser(req: Request) {
   const session = await auth.api.getSession({ headers: req.headers as any });
   return session?.user ?? null;
 }
 
-// GET /api/statuses — return all statuses for current user
 router.get('/', async (req: Request, res: Response) => {
   const user = await getUser(req);
   if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
   const { rows } = await pool.query(
-    `SELECT game_id, status FROM game_statuses
-     WHERE user_id = $1 AND status != 'none'`,
+    `SELECT game_id, status FROM game_statuses WHERE user_id = $1 AND status != 'none'`,
     [user.id]
   );
 
-  // Return as { gameId: status } map — same shape as frontend useState
   const statusMap: Record<string, string> = {};
   for (const row of rows) statusMap[row.game_id] = row.status;
 
   return res.json(statusMap);
 });
 
-// POST /api/statuses — upsert a single game status
 router.post('/', async (req: Request, res: Response) => {
   const user = await getUser(req);
   if (!user) return res.status(401).json({ error: 'Unauthorized' });
@@ -58,7 +53,6 @@ router.post('/', async (req: Request, res: Response) => {
   return res.json({ ok: true });
 });
 
-// DELETE /api/statuses — clear all statuses for current user
 router.delete('/', async (req: Request, res: Response) => {
   const user = await getUser(req);
   if (!user) return res.status(401).json({ error: 'Unauthorized' });
