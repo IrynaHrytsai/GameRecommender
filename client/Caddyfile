@@ -1,6 +1,10 @@
 :{$PORT} {
     handle /api/* {
-        reverse_proxy {$BACKEND_URL}
+        reverse_proxy {$BACKEND_URL} {
+            header_up Host {upstream_hostport}
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Forwarded-Proto {scheme}
+        }
     }
 
     handle {
