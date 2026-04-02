@@ -1,0 +1,8 @@
+:{$PORT} {
+    root * /app/dist
+
+    reverse_proxy /api/* {$BACKEND_URL}
+
+    file_server
+    try_files {path} /index.html
+}
