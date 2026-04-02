@@ -1,7 +1,7 @@
 import type { Game, RecommendationResult, GameStatus } from '../types';
 
-const BASE = import.meta.env.VITE_API_URL
-  ? `${import.meta.env.VITE_API_URL}/api`
+const BASE = import.meta.env.DEV
+  ? `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api`
   : '/api';
 
 // ── Games ─────────────────────────────────────────────
