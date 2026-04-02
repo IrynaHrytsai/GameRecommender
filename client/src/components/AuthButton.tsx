@@ -9,7 +9,7 @@ export const AuthButton: React.FC = () => {
     return <div className="auth-skeleton" />;
   }
 
-  if (!session) {
+  if (!session || !session.user) {
     return (
       <div className="auth-login-group">
         <button
